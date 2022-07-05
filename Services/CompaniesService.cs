@@ -26,6 +26,7 @@ namespace CarServiceApi.Services
             catch (Exception)
             {
                 success = false;
+                throw new Exception("NotFoundException");
             }
             return success ? $"Create successful {company.Id}" : "Create was not successful";
         }
@@ -44,11 +45,13 @@ namespace CarServiceApi.Services
                 else
                 {
                     success = false;
+
                 }
             }
             catch (Exception)
             {
                 success = false;
+                throw new Exception("NotFoundException");
             }
             return success ? "Delete successful" : "Delete was not successful";
         }
@@ -77,6 +80,7 @@ namespace CarServiceApi.Services
             catch (Exception)
             {
                 success = false;
+                throw new Exception("NotFoundException");
             }
             return success ? $"Update successful {compan.Id}" : "Update was not successful";
         }

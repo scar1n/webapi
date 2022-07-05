@@ -20,6 +20,8 @@ namespace CarServiceApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSwaggerGen();
+
             services.AddDbContext<ApplicationContext>();
 
             services.AddTransient<ICarBrandsService, CarBrandsService>();
@@ -27,10 +29,9 @@ namespace CarServiceApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<JsonConverterMiddleware>();
