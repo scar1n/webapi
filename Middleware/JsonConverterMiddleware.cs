@@ -13,7 +13,7 @@ public class JsonConverterMiddleware
     }
     public async Task InvokeAsync(HttpContext context)
     {
-        context.Response.ContentType = "application/xml";
+        context.Response.ContentType = "application/json";
         await _next.Invoke(context);
     }
 }
