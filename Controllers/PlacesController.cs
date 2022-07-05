@@ -30,7 +30,7 @@ public class PlacesController : ControllerBase
         {
             if (place != null)
             {
-                db.Instruments.Update(place);
+                db.Places.Update(place);
             }
             else
             {
@@ -49,13 +49,13 @@ public class PlacesController : ControllerBase
     public JsonResult Delete(int id)
     {
         bool success = true;
-        var temp = db.Instruments.FirstOrDefault(p => p.Id == id);
+        var temp = db.Places.FirstOrDefault(p => p.Id == id);
 
         try
         {
             if (temp != null)
             {
-                db.Instruments.Remove(temp);
+                db.Places.Remove(temp);
             }
             else
             {

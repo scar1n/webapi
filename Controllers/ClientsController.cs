@@ -1,4 +1,5 @@
 ﻿using CarServiceApi.Services;
+using CarServiceApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Linq;
 [Route("[controller]")]
 public class ClientsController : ControllerBase
 {
-    private IClientCarService ClientCarActions { get; set; }
+    private IClientCarsService ClientCarActions { get; set; }
     private ApplicationContext db = new ApplicationContext();
-    public ClientsController(IClientCarService clientCarService)
+    public ClientsController(IClientCarsService clientCarService)
     {
         ClientCarActions = clientCarService;
     }
@@ -23,7 +24,6 @@ public class ClientsController : ControllerBase
     [HttpPost]
     public JsonResult Post()
     {
-        ClientCarActions.Add();
         return new JsonResult("Work was successfully done");
     }
 

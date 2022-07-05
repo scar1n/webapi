@@ -1,4 +1,5 @@
 ﻿using CarServiceApi.Services;
+using CarServiceApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Linq;
 [Route("[controller]")]
 public class ClientCarsController : ControllerBase
 {
-    private IClientCarService ClientCarActions { get; set; }
+    private IClientCarsService ClientCarActions { get; set; }
     private ApplicationContext db = new ApplicationContext();
-    public ClientCarsController(IClientCarService clientCarService)
+    public ClientCarsController(IClientCarsService clientCarService)
     {
         ClientCarActions = clientCarService;
     }

@@ -49,13 +49,13 @@ public class CompaniesController : ControllerBase
     public JsonResult Delete(int id)
     {
         bool success = true;
-        var temp = db.CompletedServices.FirstOrDefault(p => p.Id == id);
+        var temp = db.Companies.FirstOrDefault(p => p.Id == id);
 
         try
         {
             if (temp != null)
             {
-                db.CompletedServices.Remove(temp);
+                db.Companies.Remove(temp);
             }
             else
             {

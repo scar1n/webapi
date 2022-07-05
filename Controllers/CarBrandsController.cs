@@ -1,73 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using CarServiceApi.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
 public class CarBrandsController : ControllerBase
 {
-    private ApplicationContext db = new ApplicationContext();
+    private ICarBrandsService CarBrandsService { get; set; }
+    public CarBrandsController(ICarBrandsService carBrandsService)
+    {
+        CarBrandsService = carBrandsService;
+    }
 
     [HttpGet]
-    public JsonResult Get()
+    public List<CarBrand> GetAll()
     {
-        return new JsonResult(db.CarBrands.ToList());
+        return CarBrandsService.ReadAll();
     }
 
     [HttpPost]
-    public JsonResult Post()
+    public async Task<ActionResult<string>> Create(CarBrand carBrand)
     {
-        return new JsonResult("Work was successfully done");
+        return await CarBrandsService.Create(carBrand);
     }
 
     [HttpPut]
-    public JsonResult Put(CarBrand temp)
+    public async Task<ActionResult<string>> Update(CarBrand carBrand)
     {
-        bool success = true;
-        var carBrand = db.CarBrands.FirstOrDefault(m => m.Id == temp.Id);
-        try
-        {
-            if (carBrand != null)
-            {
-                db.CarBrands.Update(carBrand);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-        db.SaveChanges();
-        return success ? new JsonResult($"Update successful {carBrand.Id}") : new JsonResult("Update was not successful");
+        return await CarBrandsService.Update(carBrand);
     }
 
-    [HttpDelete]
-    public JsonResult Delete(int id)
+    [HttpDelete("Delete/{Id}")]
+    public async Task<ActionResult<string>> Delete(int Id)
     {
-        bool success = true;
-        var temp = db.CarBrands.FirstOrDefault(p => p.Id == id);
-
-        try
-        {
-            if (temp != null)
-            {
-                db.CarBrands.Remove(temp);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-
-        return success ? new JsonResult("Delete successful") : new JsonResult("Delete was not successful");
+        return await CarBrandsService.Delete(Id);
     }
 }

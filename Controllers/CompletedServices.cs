@@ -22,7 +22,7 @@ public class CompletedServicesController : ControllerBase
     }
 
     [HttpPut]
-    public JsonResult Put(Instrument temp)
+    public JsonResult Put(CompletedService temp)
     {
         bool success = true;
         var service = db.CompletedServices.FirstOrDefault(m => m.Id == temp.Id);
@@ -49,13 +49,13 @@ public class CompletedServicesController : ControllerBase
     public JsonResult Delete(int id)
     {
         bool success = true;
-        var temp = db.Instruments.FirstOrDefault(p => p.Id == id);
+        var temp = db.CompletedServices.FirstOrDefault(p => p.Id == id);
 
         try
         {
             if (temp != null)
             {
-                db.Instruments.Remove(temp);
+                db.CompletedServices.Remove(temp);
             }
             else
             {
