@@ -1,4 +1,5 @@
 using CarServiceApi.Services;
+using CarServiceApi.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +22,7 @@ namespace CarServiceApi
             services.AddMvc();
             services.AddDbContext<ApplicationContext>();
 
-            services.AddTransient<IClientCarService, ClientCarService>();
+            services.AddTransient<ICarBrandsService, CarBrandsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -30,6 +31,9 @@ namespace CarServiceApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<JsonConverterMiddleware>();
 
             app.UseHttpsRedirection();
 

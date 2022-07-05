@@ -39,3 +39,4 @@ C:\Users\kartashov.di\source\repos\CarServiceApi\obj\Debug\netcoreapp3.1\CarServ
 C:\Users\kartashov.di\source\repos\CarServiceApi\obj\Debug\netcoreapp3.1\CarServiceApi.genruntimeconfig.cache
 C:\Users\kartashov.di\source\repos\CarServiceApi\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Users\kartashov.di\source\repos\CarServiceApi\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\kartashov.di\source\repos\CarServiceApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
