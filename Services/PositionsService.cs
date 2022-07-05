@@ -49,6 +49,7 @@ namespace CarServiceApi.Services
             catch (Exception)
             {
                 success = false;
+                throw new Exception("NotFoundException");
             }
             return success ? "Delete successful" : "Delete was not successful";
         }
@@ -61,10 +62,10 @@ namespace CarServiceApi.Services
         public async Task<string> Update(Position position)
         {
             bool success = true;
-            var pos = Context.Positions.FirstOrDefault(m => m.Id == position.Id);
+            var plac = Context.Positions.FirstOrDefault(m => m.Id == position.Id);
             try
             {
-                if (pos != null)
+                if (plac != null)
                 {
                     Context.Positions.Update(position);
                     await Context.SaveChangesAsync();
@@ -77,8 +78,9 @@ namespace CarServiceApi.Services
             catch (Exception)
             {
                 success = false;
+                throw new Exception("NotFoundException");
             }
-            return success ? $"Update successful {pos.Id}" : "Update was not successful";
+            return success ? $"Update successful {plac.Id}" : "Update was not successful";
         }
     }
 }

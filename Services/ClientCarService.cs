@@ -44,6 +44,7 @@ namespace CarServiceApi.Services
                 else
                 {
                     success = false;
+                    throw new Exception("NotFoundException");
                 }
             }
             catch (Exception)
@@ -72,6 +73,7 @@ namespace CarServiceApi.Services
                 else
                 {
                     success = false;
+                    throw new Exception("NotFoundException");
                 }
             }
             catch (Exception)

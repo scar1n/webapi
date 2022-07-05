@@ -44,6 +44,7 @@ namespace CarServiceApi.Services
                 else
                 {
                     success = false;
+                    throw new Exception("NotFoundException");
                 }
             }
             catch (Exception)
@@ -77,6 +78,7 @@ namespace CarServiceApi.Services
             catch (Exception)
             {
                 success = false;
+                throw new Exception("NotFoundException");
             }
             return success ? $"Update successful {queue.Id}" : "Update was not successful";
         }
