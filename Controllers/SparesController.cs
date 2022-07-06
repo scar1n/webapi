@@ -1,72 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CarServiceApi.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
 public class SparesController : ControllerBase
 {
-    private ApplicationContext db = new ApplicationContext();
+    private ISparesService SparesService { get; set; }
+    public SparesController(ISparesService sparesService)
+    {
+        SparesService = sparesService;
+    }
 
     [HttpGet]
-    public JsonResult Get()
+    public List<Spare> GetAll()
     {
-        return new JsonResult(db.Spares.ToList());
+        return SparesService.ReadAll();
     }
 
     [HttpPost]
-    public JsonResult Post()
+    public async Task<ActionResult<string>> Create(Spare spare)
     {
-        return new JsonResult("Work was successfully done");
+        return await SparesService.Create(spare);
     }
 
     [HttpPut]
-    public JsonResult Put(Instrument temp)
+    public async Task<ActionResult<string>> Update(Spare spare)
     {
-        bool success = true;
-        var service = db.Spares.FirstOrDefault(m => m.Id == temp.Id);
-        try
-        {
-            if (service != null)
-            {
-                db.Spares.Update(service);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-        db.SaveChanges();
-        return success ? new JsonResult($"Update successful {service.Id}") : new JsonResult("Update was not successful");
+        return await SparesService.Update(spare);
     }
 
-    [HttpDelete]
-    public JsonResult Delete(int id)
+    [HttpDelete("Delete/{Id}")]
+    public async Task<ActionResult<string>> Delete(int Id)
     {
-        bool success = true;
-        var temp = db.Spares.FirstOrDefault(p => p.Id == id);
-
-        try
-        {
-            if (temp != null)
-            {
-                db.Spares.Remove(temp);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-
-        return success ? new JsonResult("Delete successful") : new JsonResult("Delete was not successful");
+        return await SparesService.Delete(Id);
     }
 }

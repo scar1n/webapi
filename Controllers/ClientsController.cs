@@ -2,77 +2,41 @@
 using CarServiceApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
 public class ClientsController : ControllerBase
 {
-    private IClientCarsService ClientCarActions { get; set; }
-    private ApplicationContext db = new ApplicationContext();
-    public ClientsController(IClientCarsService clientCarService)
+    private IClientsService ClientService { get; set; }
+    public ClientsController(IClientsService clientService)
     {
-        ClientCarActions = clientCarService;
+        ClientService = clientService;
     }
 
     [HttpGet]
-    public JsonResult Get()
+    public List<Client> GetAll()
     {
-        return new JsonResult(db.Clients.ToList());
+        return ClientService.ReadAll();
     }
 
     [HttpPost]
-    public JsonResult Post()
+    public async Task<ActionResult<string>> Create(Client client)
     {
-        return new JsonResult("Work was successfully done");
+        return await ClientService.Create(client);
     }
 
     [HttpPut]
-    public JsonResult Put(ClientCar cc)
+    public async Task<ActionResult<string>> Update(Client client)
     {
-        bool success = true;
-        var client = db.Clients.FirstOrDefault(m => m.Id == cc.Id);
-        try
-        {
-            if (client != null)
-            {
-                db.Clients.Update(client);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-        db.SaveChanges();
-        return success ? new JsonResult($"Update successful {client.Id}") : new JsonResult("Update was not successful");
+        return await ClientService.Update(client);
     }
 
-    [HttpDelete]
-    public JsonResult Delete(int id)
+    [HttpDelete("Delete/{Id}")]
+    public async Task<ActionResult<string>> Delete(int Id)
     {
-        bool success = true;
-        var client = db.Clients.FirstOrDefault(p => p.Id == id);
-
-        try
-        {
-            if (client != null)
-            {
-                db.Clients.Remove(client);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-
-        return success ? new JsonResult("Delete successful") : new JsonResult("Delete was not successful");
+        return await ClientService.Delete(Id);
     }
 }

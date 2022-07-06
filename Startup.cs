@@ -25,11 +25,23 @@ namespace CarServiceApi
             services.AddDbContext<ApplicationContext>();
 
             services.AddTransient<ICarBrandsService, CarBrandsService>();
+            services.AddTransient<ICarModelsService, CarModelsService>();
+            services.AddTransient<ICarQueuesService, CarQueuesService>();
+            services.AddTransient<IClientCarsService, ClientCarsService>();
+            services.AddTransient<IClientsService, ClientsService>();
+            services.AddTransient<ICompaniesService, CompaniesService>();
+            services.AddTransient<ICompletedServicesService, CompletedServicesService>();
+            services.AddTransient<IEmployeesService, EmployeesService>();
+            services.AddTransient<IInstrumentsService, InstrumentsService>();
+            services.AddTransient<IModelGenerationsService, ModelGenerationsService>();
+            services.AddTransient<IPlacesService, PlacesService>();
+            services.AddTransient<IPositionsService, PositionsService>();
+            services.AddTransient<IServicesService, ServicesService>();
+            services.AddTransient<ISparesService, SparesService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             app.UseSwagger();
             app.UseSwaggerUI();
 

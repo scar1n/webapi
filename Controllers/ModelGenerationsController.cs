@@ -1,73 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-
+﻿using CarServiceApi.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
 public class ModelGenerationsController : ControllerBase
 {
-    private ApplicationContext db = new ApplicationContext();
+    private IModelGenerationsService ModelGenerationsService { get; set; }
+    public ModelGenerationsController(IModelGenerationsService modelGenerationsService)
+    {
+        ModelGenerationsService = modelGenerationsService;
+    }
 
     [HttpGet]
-    public JsonResult Get()
+    public List<ModelGeneration> GetAll()
     {
-        return new JsonResult(db.ModelGenerations.ToList());
+        return ModelGenerationsService.ReadAll();
     }
 
     [HttpPost]
-    public JsonResult Post()
+    public async Task<ActionResult<string>> Create(ModelGeneration modelGeneration)
     {
-        return new JsonResult("Work was successfully done");
+        return await ModelGenerationsService.Create(modelGeneration);
     }
 
     [HttpPut]
-    public JsonResult Put(CarModel temp)
+    public async Task<ActionResult<string>> Update(ModelGeneration modelGeneration)
     {
-        bool success = true;
-        var modelGen = db.ModelGenerations.FirstOrDefault(m => m.Id == temp.Id);
-        try
-        {
-            if (modelGen != null)
-            {
-                db.ModelGenerations.Update(modelGen);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-        db.SaveChanges();
-        return success ? new JsonResult($"Update successful {modelGen.Id}") : new JsonResult("Update was not successful");
+        return await ModelGenerationsService.Update(modelGeneration);
     }
 
-    [HttpDelete]
-    public JsonResult Delete(int id)
+    [HttpDelete("Delete/{Id}")]
+    public async Task<ActionResult<string>> Delete(int Id)
     {
-        bool success = true;
-        var temp = db.ModelGenerations.FirstOrDefault(p => p.Id == id);
-
-        try
-        {
-            if (temp != null)
-            {
-                db.ModelGenerations.Remove(temp);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-
-        return success ? new JsonResult("Delete successful") : new JsonResult("Delete was not successful");
+        return await ModelGenerationsService.Delete(Id);
     }
 }
 

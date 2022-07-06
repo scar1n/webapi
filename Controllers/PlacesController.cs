@@ -1,72 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CarServiceApi.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
 public class PlacesController : ControllerBase
 {
-    private ApplicationContext db = new ApplicationContext();
+    private IPlacesService PlacesService { get; set; }
+    public PlacesController(IPlacesService placesService)
+    {
+        PlacesService = placesService;
+    }
 
     [HttpGet]
-    public JsonResult Get()
+    public List<Place> GetAll()
     {
-        return new JsonResult(db.Places.ToList());
+        return PlacesService.ReadAll();
     }
 
     [HttpPost]
-    public JsonResult Post()
+    public async Task<ActionResult<string>> Create(Place place)
     {
-        return new JsonResult("Work was successfully done");
+        return await PlacesService.Create(place);
     }
 
     [HttpPut]
-    public JsonResult Put(Instrument temp)
+    public async Task<ActionResult<string>> Update(Place place)
     {
-        bool success = true;
-        var place = db.Places.FirstOrDefault(m => m.Id == temp.Id);
-        try
-        {
-            if (place != null)
-            {
-                db.Places.Update(place);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-        db.SaveChanges();
-        return success ? new JsonResult($"Update successful {place.Id}") : new JsonResult("Update was not successful");
+        return await PlacesService.Update(place);
     }
 
-    [HttpDelete]
-    public JsonResult Delete(int id)
+    [HttpDelete("Delete/{Id}")]
+    public async Task<ActionResult<string>> Delete(int Id)
     {
-        bool success = true;
-        var temp = db.Places.FirstOrDefault(p => p.Id == id);
-
-        try
-        {
-            if (temp != null)
-            {
-                db.Places.Remove(temp);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-
-        return success ? new JsonResult("Delete successful") : new JsonResult("Delete was not successful");
+        return await PlacesService.Delete(Id);
     }
 }
