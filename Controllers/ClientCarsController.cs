@@ -1,78 +1,39 @@
-﻿using CarServiceApi.Services;
-using CarServiceApi.Services.Interfaces;
+﻿using CarServiceApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
 public class ClientCarsController : ControllerBase
 {
-    private IClientCarsService ClientCarActions { get; set; }
-    private ApplicationContext db = new ApplicationContext();
+    private IClientCarsService ClientCarService { get; set; }
     public ClientCarsController(IClientCarsService clientCarService)
     {
-        ClientCarActions = clientCarService;
+        ClientCarService = clientCarService;
     }
 
     [HttpGet]
-    public JsonResult Get()
+    public List<ClientCar> GetAll()
     {
-        return new JsonResult(db.ClientCars.ToList());
+        return ClientCarService.ReadAll();
     }
 
     [HttpPost]
-    public JsonResult Post()
+    public async Task<ActionResult<string>> Create(ClientCar clientCar)
     {
-        return new JsonResult("Work was successfully done");
+        return await ClientCarService.Create(clientCar);
     }
 
     [HttpPut]
-    public JsonResult Put(ClientCar cc)
+    public async Task<ActionResult<string>> Update(ClientCar clientCar)
     {
-        bool success = true;
-        var clientCar = db.ClientCars.FirstOrDefault(m => m.Id == cc.Id);
-        try
-        {
-            if (clientCar != null)
-            {
-                 db.ClientCars.Update(clientCar);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-        db.SaveChanges();
-        return success ? new JsonResult($"Update successful {clientCar.Id}") : new JsonResult("Update was not successful");
+        return await ClientCarService.Update(clientCar);
     }
 
-    [HttpDelete]
-    public JsonResult Delete(int id)
+    [HttpDelete("Delete/{Id}")]
+    public async Task<ActionResult<string>> Delete(int Id)
     {
-        bool success = true;
-        var car = db.ClientCars.FirstOrDefault(p => p.Id == id);
-
-        try
-        {
-            if (car != null)
-            {
-                db.ClientCars.Remove(car);
-            }
-            else
-            {
-                success = false;
-            }
-        }
-        catch (Exception)
-        {
-            success = false;
-        }
-
-        return success ? new JsonResult("Delete successful") : new JsonResult("Delete was not successful");
+        return await ClientCarService.Delete(Id);
     }
 }

@@ -1,77 +1,41 @@
-﻿//using CarServiceApi.Services.Interfaces;
-//using Microsoft.AspNetCore.Mvc;
-//using System;
-//using System.Linq;
+﻿using CarServiceApi.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-//[ApiController]
-//[Route("[controller]")]
-//public class CarQueueController : ControllerBase
-//{
-//    private IClientCarsService ClientCarActions { get; set; }
+[ApiController]
+[Route("[controller]")]
+public class CarQueuesController : ControllerBase
+{
+    private ICarQueuesService CarQueuesService { get; set; }
+    public CarQueuesController(ICarQueuesService carQueuesService)
+    {
+        CarQueuesService = carQueuesService;
+    }
 
-//    public CarQueueController(IClientCarsService clientCarService)
-//    {
-//        ClientCarActions = clientCarService;
-//    }
+    [HttpGet]
+    public List<CarQueue> GetAll()
+    {
+        return CarQueuesService.ReadAll();
+    }
 
-//    [HttpGet]
-//    public JsonResult Get()
-//    {
-//        return new JsonResult(db.CarQueues.ToList());
-//    }
+    [HttpPost]
+    public async Task<ActionResult<string>> Create(CarQueue carQueue)
+    {
+        return await CarQueuesService.Create(carQueue);
+    }
 
-//    [HttpPost]
-//    public JsonResult Post()
-//    {
-//        return new JsonResult("Work was successfully done");
-//    }
+    [HttpPut]
+    public async Task<ActionResult<string>> Update(CarQueue carQueue)
+    {
+        return await CarQueuesService.Update(carQueue);
+    }
 
-//    [HttpPut]
-//    public JsonResult Put(CarQueue cq)
-//    {
-//        bool success = true;
-//        var carQueue = db.CarQueues.FirstOrDefault(m => m.Id == cq.Id);
-//        try
-//        {
-//            if (carQueue != null)
-//            {
-//                db.CarQueues.Update(carQueue);
-//            }
-//            else
-//            {
-//                success = false;
-//            }
-//        }
-//        catch (Exception)
-//        {
-//            success = false;
-//        }
-//        db.SaveChanges();
-//        return success ? new JsonResult($"Update successful {carQueue.Id}") : new JsonResult("Update was not successful");
-//    }
-
-//    [HttpDelete]
-//    public JsonResult Delete(int id)
-//    {
-//        bool success = true;
-//        var car = db.CarQueues.FirstOrDefault(p => p.Id == id);
-
-//        try
-//        {
-//            if (car != null)
-//            {
-//                db.CarQueues.Remove(car);
-//            }
-//            else
-//            {
-//                success = false;
-//            }
-//        }
-//        catch (Exception)
-//        {
-//            success = false;
-//        }
-
-//        return success ? new JsonResult("Delete successful") : new JsonResult("Delete was not successful");
-//    }
-//}
+    [HttpDelete("Delete/{Id}")]
+    public async Task<ActionResult<string>> Delete(int Id)
+    {
+        return await CarQueuesService.Delete(Id);
+    }
+}
